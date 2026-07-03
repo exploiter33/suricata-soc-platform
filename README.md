@@ -84,7 +84,7 @@ All queries mapped to MITRE ATT&CK framework:
 ### 1. Clone and Configure
 
 ```bash
-git clone https://github.com/YOUR_USER/suricata-soc-platform.git
+git clone https://github.com/exploiter33/suricata-soc-platform.git
 cd suricata-soc-platform
 cp .env.example .env
 # Edit .env with your passwords if desired
