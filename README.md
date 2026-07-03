@@ -4,6 +4,10 @@
 
 ![Dashboard Preview](evidence/alerts-overview.png)
 
+> **Target Role:** SOC Analyst / Detection Engineer  
+> **Resume Alignment:** [ALIGNMENT.md](ALIGNMENT.md) — maps every resume bullet to project files  
+> **Portfolio Walkthrough:** [PORTFOLIO.md](PORTFOLIO.md) — end-to-end incident: detect → investigate → respond
+
 ---
 
 ## Architecture
