@@ -1,0 +1,35 @@
+{
+  "name": "Escalate High-Severity Alert to Slack",
+  "nodes": [
+    {
+      "parameters": {},
+      "name": "Webhook",
+      "type": "n8n-nodes-base.webhook",
+      "typeVersion": 1,
+      "position": [250, 300]
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "https://hooks.slack.com/services/YOUR/WEBHOOK/URL",
+        "jsonParameters": true,
+        "sendBody": true,
+        "bodyParameters": {
+          "parameters": [
+            {
+              "name": "text",
+              "value": "HIGH alert: {{ $json.alert_signature }}\nSeverity: {{ $json.alert_severity }}\nSource: {{ $json.src_ip }}:{{ $json.src_port }}\nDestination: {{ $json.dest_ip }}:{{ $json.dest_port }}\nTime: {{ $json.timestamp }}"
+            }
+          ]
+        }
+      },
+      "name": "Send Slack Message",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4,
+      "position": [450, 300]
+    }
+  ],
+  "connections": {
+    "Webhook": { "main": [[ { "node": "Send Slack Message" } ]] }
+  }
+}

@@ -1,0 +1,189 @@
+{
+  "__inputs": [],
+  "__requires": [],
+  "title": "SOC \u2014 Alerts Overview",
+  "uid": "soc-alerts-overview",
+  "schemaVersion": 39,
+  "version": 1,
+  "tags": [
+    "soc",
+    "suricata"
+  ],
+  "panels": [
+    {
+      "id": 1,
+      "title": "Alerts by Severity (Last 24h)",
+      "type": "piechart",
+      "gridPos": {
+        "h": 8,
+        "w": 6,
+        "x": 0,
+        "y": 0
+      },
+      "targets": [
+        {
+          "datasource": {
+            "type": "grafana-clickhouse-datasource",
+            "uid": "clickhouse"
+          },
+          "rawSql": "SELECT alert_severity, count() AS count FROM soc.suricata_alerts WHERE timestamp > now() - INTERVAL 5 YEAR GROUP BY alert_severity ORDER BY alert_severity",
+          "format": "table"
+        }
+      ],
+      "fieldConfig": {
+        "defaults": {
+          "unit": "short",
+          "color": {
+            "mode": "thresholds"
+          }
+        },
+        "overrides": [
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "1"
+            },
+            "properties": [
+              {
+                "id": "color",
+                "value": {
+                  "fixedColor": "red",
+                  "mode": "fixed"
+                }
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "2"
+            },
+            "properties": [
+              {
+                "id": "color",
+                "value": {
+                  "fixedColor": "orange",
+                  "mode": "fixed"
+                }
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "3"
+            },
+            "properties": [
+              {
+                "id": "color",
+                "value": {
+                  "fixedColor": "yellow",
+                  "mode": "fixed"
+                }
+              }
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "id": 2,
+      "title": "Top Alert Signatures (Last 24h)",
+      "type": "bargauge",
+      "gridPos": {
+        "h": 8,
+        "w": 6,
+        "x": 6,
+        "y": 0
+      },
+      "targets": [
+        {
+          "datasource": {
+            "type": "grafana-clickhouse-datasource",
+            "uid": "clickhouse"
+          },
+          "rawSql": "SELECT alert_signature, count() AS count FROM soc.suricata_alerts WHERE timestamp > now() - INTERVAL 5 YEAR GROUP BY alert_signature ORDER BY count DESC LIMIT 10",
+          "format": "table"
+        }
+      ]
+    },
+    {
+      "id": 3,
+      "title": "Alerts Timeline (Last 24h)",
+      "type": "timeseries",
+      "gridPos": {
+        "h": 8,
+        "w": 12,
+        "x": 0,
+        "y": 8
+      },
+      "targets": [
+        {
+          "datasource": {
+            "type": "grafana-clickhouse-datasource",
+            "uid": "clickhouse"
+          },
+          "rawSql": "SELECT toStartOfHour(timestamp) AS time, count() AS count FROM soc.suricata_alerts WHERE timestamp > now() - INTERVAL 5 YEAR GROUP BY hour ORDER BY hour",
+          "format": "timeseries"
+        }
+      ],
+      "fieldConfig": {
+        "defaults": {
+          "unit": "short",
+          "custom": {
+            "lineInterpolation": "smooth",
+            "showPoints": "auto"
+          }
+        }
+      }
+    },
+    {
+      "id": 4,
+      "title": "Top Source IPs (Last 24h)",
+      "type": "table",
+      "gridPos": {
+        "h": 8,
+        "w": 6,
+        "x": 0,
+        "y": 16
+      },
+      "targets": [
+        {
+          "datasource": {
+            "type": "grafana-clickhouse-datasource",
+            "uid": "clickhouse"
+          },
+          "rawSql": "SELECT src_ip AS source_ip, count() AS alert_count, countDistinct(alert_signature) AS unique_signatures, max(timestamp) AS last_seen FROM soc.suricata_alerts WHERE timestamp > now() - INTERVAL 5 YEAR GROUP BY src_ip ORDER BY alert_count DESC LIMIT 20",
+          "format": "table"
+        }
+      ]
+    },
+    {
+      "id": 5,
+      "title": "Alert Distribution by Protocol",
+      "type": "piechart",
+      "gridPos": {
+        "h": 8,
+        "w": 6,
+        "x": 6,
+        "y": 16
+      },
+      "targets": [
+        {
+          "datasource": {
+            "type": "grafana-clickhouse-datasource",
+            "uid": "clickhouse"
+          },
+          "rawSql": "SELECT proto, count() AS count FROM soc.suricata_alerts WHERE timestamp > now() - INTERVAL 5 YEAR GROUP BY proto ORDER BY count DESC",
+          "format": "table"
+        }
+      ]
+    }
+  ],
+  "time": {
+    "from": "now-5y",
+    "to": "now"
+  },
+  "timepicker": {},
+  "refresh": "30s"
+}

@@ -1,0 +1,67 @@
+[sources.suricata_alert]
+type = "file"
+include = ["/suricata/eve.json"]
+ignore_checkpoints = true
+read_from = "beginning"
+
+[transforms.parse_suricata]
+type = "remap"
+inputs = ["suricata_alert"]
+source = '''
+  parsed = parse_json!(.message)
+  . = parsed
+
+  # Normalize timestamp: strip timezone from ISO 8601 for ClickHouse DateTime
+  ts_str, ts_err = to_string(.timestamp)
+  if is_null(ts_err) {
+    .timestamp = replace(ts_str, r'T', " ")
+    .timestamp = replace(.timestamp, r'\.[0-9]+.*', "")
+  }
+
+  # Remove fields not in any table
+  del(.flow)
+  del(.pkt_src)
+  del(.community_id)
+  del(.direction)
+  del(.pcap_cnt)
+
+  if .event_type == "alert" {
+    .alert_sid = .alert.signature_id
+    .alert_gid = .alert.gid
+    .alert_rev = .alert.rev
+    .alert_severity = .alert.severity
+    .alert_signature = .alert.signature
+    .alert_category = .alert.category
+    del(.alert)
+    ._table = "suricata_alerts"
+  } else if .event_type == "http" {
+    .hostname = .http.hostname
+    .url = .http.url
+    .http_method = .http.http_method
+    .status_code = .http.status
+    .user_agent = .http.http_user_agent
+    .content_type = .http.http_content_type
+    del(.http)
+    ._table = "suricata_http"
+  } else if .event_type == "dns" {
+    .dns_query = .dns.rrname
+    .dns_type = .dns.rrtype
+    .dns_rcode = .dns.rcode
+    .dns_answers = []
+    del(.dns)
+    ._table = "suricata_dns"
+  } else {
+    abort
+  }
+'''
+
+[sinks.clickhouse_alerts]
+type = "clickhouse"
+inputs = ["parse_suricata"]
+endpoint = "http://clickhouse:8123"
+database = "soc"
+table = "{{ _table }}"
+auth.strategy = "basic"
+auth.user = "soc_user"
+auth.password = "${CLICKHOUSE_PASSWORD}"
+skip_unknown_fields = true

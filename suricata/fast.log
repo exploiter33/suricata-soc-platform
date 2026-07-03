@@ -1,0 +1,14 @@
+09/14/2021-20:04:50.801075  [**] [1:4000003:1] THREAT: Nmap Stealth Scan Detected [**] [Classification: (null)] [Priority: 3] {TCP} 10.0.0.168:49710 -> 104.16.18.94:80
+09/14/2021-20:05:32.825963  [**] [1:4000004:1] THREAT: Potential Malware Download (.exe) [**] [Classification: (null)] [Priority: 3] {TCP} 10.0.0.168:49724 -> 103.232.55.148:80
+09/14/2021-20:05:31.898488  [**] [1:4000004:1] THREAT: Potential Malware Download (.exe) [**] [Classification: (null)] [Priority: 3] {TCP} 10.0.0.168:49722 -> 13.107.5.80:80
+12/30/2025-08:42:32.500881  [**] [1:4000003:1] THREAT: Nmap Stealth Scan Detected [**] [Classification: (null)] [Priority: 3] {TCP} 10.12.30.101:53666 -> 23.219.160.240:443
+12/30/2025-08:44:45.851894  [**] [1:2221001:1] SURICATA HTTP gzip decompression failed [**] [Classification: Generic Protocol Command Decode] [Priority: 3] {TCP} 10.12.30.101:53898 -> 13.201.207.191:80
+12/30/2025-08:44:49.045672  [**] [1:2221001:1] SURICATA HTTP gzip decompression failed [**] [Classification: Generic Protocol Command Decode] [Priority: 3] {TCP} 13.201.207.191:80 -> 10.12.30.101:53898
+12/30/2025-08:45:00.430838  [**] [1:2221001:1] SURICATA HTTP gzip decompression failed [**] [Classification: Generic Protocol Command Decode] [Priority: 3] {TCP} 10.12.30.101:61472 -> 13.201.207.191:80
+12/30/2025-08:45:05.863066  [**] [1:2221001:1] SURICATA HTTP gzip decompression failed [**] [Classification: Generic Protocol Command Decode] [Priority: 3] {TCP} 10.12.30.101:57173 -> 13.201.207.191:80
+12/30/2025-08:45:11.681718  [**] [1:2221001:1] SURICATA HTTP gzip decompression failed [**] [Classification: Generic Protocol Command Decode] [Priority: 3] {TCP} 10.12.30.101:54800 -> 13.201.207.191:80
+12/30/2025-08:45:12.738619  [**] [1:2221001:1] SURICATA HTTP gzip decompression failed [**] [Classification: Generic Protocol Command Decode] [Priority: 3] {TCP} 13.201.207.191:80 -> 10.12.30.101:54800
+12/30/2025-08:41:12.842719  [**] [1:2221001:1] SURICATA HTTP gzip decompression failed [**] [Classification: Generic Protocol Command Decode] [Priority: 3] {TCP} 13.201.207.191:80 -> 10.12.30.101:61472
+12/30/2025-08:41:12.842719  [**] [1:2221001:1] SURICATA HTTP gzip decompression failed [**] [Classification: Generic Protocol Command Decode] [Priority: 3] {TCP} 13.201.207.191:80 -> 10.12.30.101:57173
+02/04/2023-21:15:42.489403  [**] [1:2260003:1] SURICATA Applayer Protocol detection skipped [**] [Classification: Generic Protocol Command Decode] [Priority: 3] {TCP} 192.168.56.101:49157 -> 192.168.56.102:4444
+02/04/2023-21:15:42.267328  [**] [1:4000003:1] THREAT: Nmap Stealth Scan Detected [**] [Classification: (null)] [Priority: 3] {TCP} 192.168.56.102:43237 -> 192.168.56.101:445

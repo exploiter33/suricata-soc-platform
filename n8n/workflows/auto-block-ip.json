@@ -1,0 +1,45 @@
+{
+  "name": "Auto-Block Malicious IP (iptables)",
+  "nodes": [
+    {
+      "parameters": {},
+      "name": "Webhook",
+      "type": "n8n-nodes-base.webhook",
+      "typeVersion": 1,
+      "position": [250, 300]
+    },
+    {
+      "parameters": {
+        "command": "sudo iptables -A INPUT -s {{ $json.src_ip }} -j DROP && sudo iptables-save > /etc/iptables/rules.v4"
+      },
+      "name": "Block IP via SSH",
+      "type": "n8n-nodes-base.ssh",
+      "typeVersion": 1,
+      "position": [450, 300]
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "https://hooks.slack.com/services/YOUR/WEBHOOK/URL",
+        "jsonParameters": true,
+        "sendBody": true,
+        "bodyParameters": {
+          "parameters": [
+            {
+              "name": "text",
+              "value": "Blocked IP {{ $json.src_ip }} for {{ $json.alert_signature }}"
+            }
+          ]
+        }
+      },
+      "name": "Notify Slack",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4,
+      "position": [650, 300]
+    }
+  ],
+  "connections": {
+    "Webhook": { "main": [[ { "node": "Block IP via SSH" } ]] },
+    "Block IP via SSH": { "main": [[ { "node": "Notify Slack" } ]] }
+  }
+}

@@ -1,0 +1,93 @@
+{
+  "__inputs": [],
+  "__requires": [],
+  "title": "SOC \u2014 Incident Timeline & Drill-Down",
+  "uid": "soc-incident-timeline",
+  "schemaVersion": 39,
+  "version": 1,
+  "tags": [
+    "soc",
+    "incident-response"
+  ],
+  "panels": [
+    {
+      "id": 1,
+      "title": "Alert Timeline (Last 7 Days)",
+      "type": "timeseries",
+      "gridPos": {
+        "h": 8,
+        "w": 12,
+        "x": 0,
+        "y": 0
+      },
+      "targets": [
+        {
+          "datasource": {
+            "type": "grafana-clickhouse-datasource",
+            "uid": "clickhouse"
+          },
+          "rawSql": "SELECT toStartOfHour(timestamp) AS time, alert_severity, count() AS count FROM soc.suricata_alerts WHERE timestamp > now() - INTERVAL 5 YEAR GROUP BY hour, alert_severity ORDER BY hour",
+          "format": "timeseries"
+        }
+      ],
+      "fieldConfig": {
+        "defaults": {
+          "custom": {
+            "lineInterpolation": "stepBefore",
+            "stacking": {
+              "mode": "normal"
+            }
+          }
+        }
+      }
+    },
+    {
+      "id": 2,
+      "title": "Alert Details \u2014 Last 100 Events",
+      "type": "table",
+      "gridPos": {
+        "h": 12,
+        "w": 12,
+        "x": 0,
+        "y": 8
+      },
+      "targets": [
+        {
+          "datasource": {
+            "type": "grafana-clickhouse-datasource",
+            "uid": "clickhouse"
+          },
+          "rawSql": "SELECT timestamp, alert_severity AS sev, alert_signature AS signature, alert_category AS category, src_ip, src_port, dest_ip, dest_port, proto FROM soc.suricata_alerts WHERE timestamp > now() - INTERVAL 5 YEAR ORDER BY timestamp DESC LIMIT 100",
+          "format": "table"
+        }
+      ]
+    },
+    {
+      "id": 3,
+      "title": "Top Events by Source (Heatmap)",
+      "type": "heatmap",
+      "gridPos": {
+        "h": 8,
+        "w": 12,
+        "x": 0,
+        "y": 20
+      },
+      "targets": [
+        {
+          "datasource": {
+            "type": "grafana-clickhouse-datasource",
+            "uid": "clickhouse"
+          },
+          "rawSql": "SELECT toStartOfHour(timestamp) AS time, src_ip AS source, count() AS count FROM soc.suricata_alerts WHERE timestamp > now() - INTERVAL 5 YEAR GROUP BY hour, source ORDER BY hour",
+          "format": "timeseries"
+        }
+      ]
+    }
+  ],
+  "time": {
+    "from": "now-5y",
+    "to": "now"
+  },
+  "timepicker": {},
+  "refresh": "30s"
+}

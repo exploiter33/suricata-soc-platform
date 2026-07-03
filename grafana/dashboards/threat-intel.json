@@ -1,0 +1,83 @@
+{
+  "__inputs": [],
+  "__requires": [],
+  "title": "SOC \u2014 Threat Intelligence & IOC View",
+  "uid": "soc-threat-intel",
+  "schemaVersion": 39,
+  "version": 1,
+  "tags": [
+    "soc",
+    "threat-intel"
+  ],
+  "panels": [
+    {
+      "id": 1,
+      "title": "DNS Queries to Suspicious Domains (Last 7d)",
+      "type": "table",
+      "gridPos": {
+        "h": 8,
+        "w": 12,
+        "x": 0,
+        "y": 0
+      },
+      "targets": [
+        {
+          "datasource": {
+            "type": "grafana-clickhouse-datasource",
+            "uid": "clickhouse"
+          },
+          "rawSql": "SELECT dns_query AS domain, count() AS query_count, countDistinct(src_ip) AS unique_sources, max(timestamp) AS last_seen FROM soc.suricata_dns WHERE timestamp > now() - INTERVAL 5 YEAR AND (dns_query LIKE '%.xyz' OR dns_query LIKE '%.top' OR dns_query LIKE '%.tk') GROUP BY dns_query ORDER BY query_count DESC",
+          "format": "table"
+        }
+      ]
+    },
+    {
+      "id": 2,
+      "title": "HTTP Requests to Suspicious URIs (Last 7d)",
+      "type": "table",
+      "gridPos": {
+        "h": 8,
+        "w": 12,
+        "x": 0,
+        "y": 8
+      },
+      "targets": [
+        {
+          "datasource": {
+            "type": "grafana-clickhouse-datasource",
+            "uid": "clickhouse"
+          },
+          "rawSql": "SELECT url, hostname, src_ip, dest_ip, http_method, status_code, timestamp FROM soc.suricata_http WHERE timestamp > now() - INTERVAL 5 YEAR AND (url LIKE '%.exe' OR url LIKE '%.dll' OR url LIKE '%.ps1') ORDER BY timestamp DESC LIMIT 50",
+          "format": "table"
+        }
+      ]
+    },
+    {
+      "id": 3,
+      "title": "Outbound Connections to Uncommon Ports",
+      "type": "table",
+      "gridPos": {
+        "h": 8,
+        "w": 12,
+        "x": 0,
+        "y": 16
+      },
+      "targets": [
+        {
+          "datasource": {
+            "type": "grafana-clickhouse-datasource",
+            "uid": "clickhouse"
+          },
+          "rawSql": "SELECT src_ip, dest_ip, dest_port, alert_signature, timestamp FROM soc.suricata_alerts WHERE timestamp > now() - INTERVAL 5 YEAR AND dest_port NOT IN (80, 443, 8080, 22, 53) AND event_type = 'alert' ORDER BY timestamp DESC LIMIT 50",
+          "format": "table"
+        }
+      ]
+    }
+  ],
+  "time": {
+    "from": "now-5y",
+    "to": "now"
+  },
+  "timepicker": {},
+  "refresh": "30s"
+}

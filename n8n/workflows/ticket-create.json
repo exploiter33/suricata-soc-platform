@@ -1,0 +1,34 @@
+{
+  "name": "Create Incident Ticket from Alert",
+  "nodes": [
+    {
+      "parameters": {},
+      "name": "Webhook",
+      "type": "n8n-nodes-base.webhook",
+      "typeVersion": 1,
+      "position": [250, 300]
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "http://localhost:3000/api/tickets",
+        "jsonParameters": true,
+        "sendBody": true,
+        "bodyParameters": {
+          "parameters": [
+            { "name": "title", "value": "Alert: {{ $json.alert_signature }}" },
+            { "name": "description", "value": "Source: {{ $json.src_ip }}\nDest: {{ $json.dest_ip }}\nSeverity: {{ $json.alert_severity }}\nCategory: {{ $json.alert_category }}" },
+            { "name": "priority", "value": "{{ $json.alert_severity <= 1 ? 'critical' : 'high' }}" }
+          ]
+        }
+      },
+      "name": "Create Ticket",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4,
+      "position": [450, 300]
+    }
+  ],
+  "connections": {
+    "Webhook": { "main": [[ { "node": "Create Ticket" } ]] }
+  }
+}
