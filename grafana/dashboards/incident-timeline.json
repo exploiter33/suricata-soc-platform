@@ -26,7 +26,7 @@
             "type": "grafana-clickhouse-datasource",
             "uid": "clickhouse"
           },
-          "rawSql": "SELECT toStartOfHour(timestamp) AS time, alert_severity, count() AS count FROM soc.suricata_alerts WHERE timestamp > now() - INTERVAL 5 YEAR GROUP BY hour, alert_severity ORDER BY hour",
+          "rawSql": "SELECT toStartOfHour(timestamp) AS time, alert_severity, count() AS count FROM soc.suricata_alerts WHERE timestamp > now() - INTERVAL 5 YEAR GROUP BY time, alert_severity ORDER BY time",
           "format": "timeseries"
         }
       ],
@@ -78,7 +78,7 @@
             "type": "grafana-clickhouse-datasource",
             "uid": "clickhouse"
           },
-          "rawSql": "SELECT toStartOfHour(timestamp) AS time, src_ip AS source, count() AS count FROM soc.suricata_alerts WHERE timestamp > now() - INTERVAL 5 YEAR GROUP BY hour, source ORDER BY hour",
+          "rawSql": "SELECT toStartOfHour(timestamp) AS time, src_ip AS source, count() AS count FROM soc.suricata_alerts WHERE timestamp > now() - INTERVAL 5 YEAR GROUP BY time, source ORDER BY time",
           "format": "timeseries"
         }
       ]
