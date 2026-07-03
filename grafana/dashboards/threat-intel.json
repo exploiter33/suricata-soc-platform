@@ -26,7 +26,7 @@
             "type": "grafana-clickhouse-datasource",
             "uid": "clickhouse"
           },
-          "rawSql": "SELECT dns_query AS domain, count() AS query_count, countDistinct(src_ip) AS unique_sources, max(timestamp) AS last_seen FROM soc.suricata_dns WHERE timestamp > now() - INTERVAL 5 YEAR AND (dns_query LIKE '%.xyz' OR dns_query LIKE '%.top' OR dns_query LIKE '%.tk') GROUP BY dns_query ORDER BY query_count DESC",
+          "rawSql": "SELECT dns_query AS domain, count() AS query_count, countDistinct(src_ip) AS unique_sources, max(timestamp) AS last_seen FROM soc.suricata_dns WHERE timestamp > now() - INTERVAL 5 YEAR AND (dns_query LIKE '%.xyz' OR dns_query LIKE '%.top' OR dns_query LIKE '%.tk' OR dns_query LIKE '%.cyou' OR dns_query LIKE '%.cc' OR dns_query LIKE '%.ml' OR dns_query LIKE '%.gq' OR dns_query LIKE '%.cf') GROUP BY dns_query ORDER BY query_count DESC",
           "format": "table"
         }
       ]

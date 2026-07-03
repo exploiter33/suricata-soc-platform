@@ -56,8 +56,14 @@ The Threat Intelligence view shows the suspicious domain and HTTP request. The i
 
 The following screenshots show live data in Grafana after running the attack simulations:
 
-> **[alerts-overview.png]** — SOC Alerts Overview dashboard showing severity breakdown, top signatures, alert timeline, and top source IPs.
+![Alerts Overview](alerts-overview.png)
 
-> **[incident-timeline.png]** — Incident timeline showing alert heatmap, event drill-down, and source IP clustering over 7 days.
+> SOC Alerts Overview dashboard showing severity breakdown, top signatures, alert timeline, and top source IPs.
 
-> **[threat-intel.png]** — Threat Intelligence dashboard showing suspicious DNS queries, malware downloads, and uncommon outbound connections.
+![Incident Timeline](incident-timeline.png)
+
+> Incident timeline showing alert heatmap, event drill-down, and source IP clustering over 7 days.
+
+![Threat Intelligence](threat-intel.png)
+
+> Threat Intelligence dashboard showing suspicious DNS queries, malware downloads, and uncommon outbound connections.
